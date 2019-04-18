@@ -11,12 +11,13 @@ _find_closest_datadir() {
     local old_pattern=
 
     dir_count=$(/bin/ls -1 "${search_basepath}" | wc -l)
-    while [[ -z $found_dir ]] && [[ ${old_pattern} != "${version}*" ]]
+    while [[ -z $found_dir ]] && [[ ${old_pattern} != ${version} ]]
     do
-      found_dir=$(find "$search_basepath" -maxdepth 1 -name "${version}*" | sort -rn |head -n 1)
-      old_pattern="${version}*"
+      found_dir=$(find "$search_basepath" -maxdepth 1 -name "${version}" | sort -rn |head -n 1)
+      old_pattern="${version}"
       if [[ -z $found_dir ]]; then
         version=${version%[.|-]*}
+        found_dir=$(find "$search_basepath" -maxdepth 1 -name "${version}*" | sort -rn |head -n 1)
       fi
     done
     [[ -z $found_dir ]] && exit 2
